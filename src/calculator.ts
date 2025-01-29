@@ -2,10 +2,10 @@ const NUM_DECIMAL_PLACES = 2;
 
 export function calculateSchedule(principal: number, numPeriods: number, addOnRate: number) {
     let totalInterest = round(principal * addOnRate * numPeriods);
-    let totalPayment = round(principal + totalInterest);
+    let totalPayment = principal + totalInterest;
 
     let paymentPerPeriod = round((principal / numPeriods) + (principal * addOnRate));
-    let finalPayment = round(totalPayment - paymentPerPeriod * (numPeriods - 1));
+    let finalPayment = totalPayment - paymentPerPeriod * (numPeriods - 1);
 
     let f = (rate: number) => simulate(principal, numPeriods, paymentPerPeriod, finalPayment, totalInterest, rate);
     let range = [addOnRate / 2, addOnRate * 4] as const;
@@ -26,12 +26,17 @@ export function calculateSchedule(principal: number, numPeriods: number, addOnRa
 
         schedule.push({
             month: i,
-            startingBalance: balance.toFixed(NUM_DECIMAL_PLACES),
-            totalPayment: totalPayment.toFixed(NUM_DECIMAL_PLACES),
-            principalPayment: principalPayment.toFixed(NUM_DECIMAL_PLACES),
-            interestPayment: interestPayment.toFixed(NUM_DECIMAL_PLACES),
-            endingBalance: (balance -= principalPayment).toFixed(NUM_DECIMAL_PLACES),
+            startingBalance: balance,
+            totalPayment: totalPayment,
+            principalPayment: principalPayment,
+            interestPayment: interestPayment,
+            endingBalance: balance -= principalPayment,
         });
+    }
+
+    if (round(schedule[numPeriods - 1].endingBalance) === 0) {
+        // Make sure it's positive
+        schedule[numPeriods - 1].endingBalance = 0;
     }
 
     return { effectiveRate, schedule };

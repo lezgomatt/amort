@@ -15,6 +15,8 @@
     Number(inputLoanTerm),
     Number(inputMonthlyAddOn) / 100,
   ));
+
+  let numFormat = new Intl.NumberFormat(navigator.language, { style: "currency", currency: "PHP" });
 </script>
 
 <main class="m-12 p-6 border rounded max-w-7xl bg-gray-100">
@@ -66,11 +68,11 @@
         {#each schedule as s}
           <TableBodyRow>
             <TableBodyCell class="text-right">{s.month}</TableBodyCell>
-            <TableBodyCell class="text-right">PHP {s.startingBalance}</TableBodyCell>
-            <TableBodyCell class="text-right">PHP {s.totalPayment}</TableBodyCell>
-            <TableBodyCell class="text-right">PHP {s.principalPayment}</TableBodyCell>
-            <TableBodyCell class="text-right">PHP {s.interestPayment}</TableBodyCell>
-            <TableBodyCell class="text-right">PHP {s.endingBalance}</TableBodyCell>
+            <TableBodyCell class="text-right">{numFormat.format(s.startingBalance)}</TableBodyCell>
+            <TableBodyCell class="text-right">{numFormat.format(s.totalPayment)}</TableBodyCell>
+            <TableBodyCell class="text-right">{numFormat.format(s.principalPayment)}</TableBodyCell>
+            <TableBodyCell class="text-right">{numFormat.format(s.interestPayment)}</TableBodyCell>
+            <TableBodyCell class="text-right">{numFormat.format(s.endingBalance)}</TableBodyCell>
           </TableBodyRow>
         {/each}
       </TableBody>
